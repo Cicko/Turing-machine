@@ -32,9 +32,10 @@ void Node::SetLeft(Node* izq){
 
 
 // Getters
-char Node::GetSymbol() const {
+const char Node::GetSymbol() {
   return symbol;
 }
+
 Node* Node::GetRight(){
 	if(right == NULL){
 		right = new Node ();

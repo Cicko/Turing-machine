@@ -6,8 +6,10 @@
 * @description: This class represent a node in the turing tape, containing a symbol and adjacent neighbors
 *
 **/
+#include <cstdlib>
 
 #define INITIA_STATE 0
+#define WHITE '$'
 
 class Node {
   char symbol;
@@ -21,6 +23,6 @@ public:
   void SetRight(Node* right);
   void SetLeft(Node* left);
   const char GetSymbol();
-  const Node* getRight ();
-  const Node* getLeft ();
-}
+  Node* GetRight ();
+  Node* GetLeft ();
+};

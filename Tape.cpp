@@ -31,14 +31,15 @@ void Tape::LoadInputToTape(char* input){
 
 // Constructors
 Tape::Tape(char* input) {
-  cabeza = NULL;
+  head = NULL;
   init = NULL;
   inputLength = 0;
   LoadInputToTape(input);
 }
 
 Tape::~Tape(){
-	cabeza = NULL; inputLength = 0;
+	head = NULL;
+	inputLength = 0;
 }
 
 // public methods
@@ -49,7 +50,7 @@ void Tape::MoveRight(){
 	head->SetLeft(aux);
 }
 
-void Tape::moverIzquierda(){
+void Tape::MoveLeft(){
 	headPos--;
 	Node* aux = head;
 	head = head->GetLeft();
@@ -66,11 +67,11 @@ void Tape::Movement(char mov){
 		cerr << "Error_02: Incorrect movement. The movement " << mov << " is not recognized." << endl;
 }
 
-bool Tape::IsEmpty() const{
+const bool Tape::IsEmpty() {
   return (0 == inputLength);
 }
 
-char Tape::Read() const{
+const char Tape::Read() {
 	return head->GetSymbol();
 }
 
@@ -82,7 +83,7 @@ void Tape::Write(char c){
 }
 
 
-void Tape::ShowTape() const{
+const void Tape::ShowTape() {
 	Node* aux = init;
 	aux = aux->GetLeft();
 	int it = -1;
