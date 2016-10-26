@@ -24,7 +24,15 @@ void Transition::SetTapesIO(vector<tapeWM_t> aTapesWM) {
 }
 
 void Transition::ShowTransition () {
-  cout << "((" << GetFrom() << ", " << GetTo() << "), ";
+  cout << "From State " << GetFrom() << " to state " << GetTo() << ": ((";
+  for (int i = 0;i < input.size(); i++) {
+    cout << input[i];
+    if (i < input.size() - 1)
+      cout << ", ";
+    else
+      cout << "), ";
+
+  }
   for (int i = 0; i < tapesWM.size(); i++) {
     cout << "(" << tapesWM[i].first << ", " << tapesWM[i].second << ")";
     if (i < tapesWM.size() - 1)

@@ -3,7 +3,6 @@
 ///// CONSTRUCTOR Y DESTRUCTOR
 Turing::Turing(){
 	LoadMachine();
-	cout << "Terminamos de construir" << endl;
 }
 
 Turing::~Turing(){
@@ -123,7 +122,7 @@ void Turing::ShowNumTapes () {
 	cout << "Number of tapes: " << GetNumTapes() << endl;
 }
 void Turing::ShowTransitions () {
-	cout << "Transitions: " << endl;
+	cout << "Transitions (format: ((read), (write, movement)): " << endl;
 	for (int i = 0; i < GetNumStates(); i++) {
 		states[i]->ShowAllTransitions();
 	}
