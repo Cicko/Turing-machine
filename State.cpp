@@ -1,43 +1,32 @@
 #include "State.hpp"
 
-State::State() {
-  transitions = NULL;
-  numTransitions = 0;
-  final = false;
+State::State(string anId) {
+  id = anId;
+  isFinal = false;
 }
 
 State::~State() {
-	transitions = NULL;
-	final = false;
-	numTransitions = 0;
+	transitions.clear();
+	isFinal = false;
 }
 
 ////// public functions
 void State::SetFinal(bool f) {
-	final = f;
+	isFinal = f;
 }
 
 const bool State::IsFinal() {
-	return final;
+	return isFinal;
 }
 
-const int State::GetNumTransitions() {
-	return numTransitions;
+int State::GetNumTransitions() {
+  return transitions.size();
 }
 
-void State::SetMaxPossibleTrans(int max) {
-	if(transitions == NULL)
-		transitions = new Transition [max];
+void State::NewTransition(string next, vector<tapeIO_t> tapesIO, string mov) {
+  transitions.push_back(new Transition(next, tapesIO, mov));
 }
 
-void State::NewTransition(char rds, char wrt, char mov, int next) {
-	transitions[numTransitions].reads = rds;
-	transitions[numTransitions].writes = wrt;
-	transitions[numTransitions].movement = mov;
-	transitions[numTransitions].nextState = next;
-  numTransitions++;
-}
-
-const Transition State::GetTransition(int inx){
+Transition State::GetTransition(int inx) {
 		return transitions[inx];
 }

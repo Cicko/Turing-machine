@@ -1,27 +1,31 @@
 #include "Node.hpp"
 
 
-// Constructors
-Node::Node() {
-  symbol = '$';
+
+Node::Node(string aWhite) {
+  white = aWhite;
+  symbol = white;
   right = NULL;
   left = NULL;
 }
 
-Node::Node(char simb) {
-  symbol = simb;
+Node::Node(string aWhite, string aSymbol) {
+  white = aWhite;
+  symbol = aSymbol;
   right = NULL;
   left = NULL;
 }
 
 Node::~Node(){
-	symbol = '$';
 }
 
 
 // Setters
-void Node::SetSymbol(char simb){
+void Node::SetSymbol(string simb){
 	symbol = simb;
+}
+void Node::SetWhite(string aWhite) {
+  white = aWhite;
 }
 void Node::SetRight(Node* der){
 	right = der;
@@ -32,18 +36,21 @@ void Node::SetLeft(Node* izq){
 
 
 // Getters
-const char Node::GetSymbol() {
+string Node::GetSymbol() {
   return symbol;
+}
+string Node::GetWhite() {
+  return white;
 }
 
 Node* Node::GetRight(){
 	if(right == NULL){
-		right = new Node ();
+		right = new Node (white);
 	}
 	return right;
 }
 Node* Node::GetLeft(){
 	if(left == NULL)
-		left = new Node ();
+		left = new Node (white);
 	return left;
 }

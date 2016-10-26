@@ -7,25 +7,31 @@
 *
 **/
 #include <cstdlib>
+#include <string>
+#include <vector>
+#include "Transition.hpp"
+#include "tapeIO_t.hpp"
 
-typedef struct {
-	char reads;
-	char writes;
-	char movement;
-	int nextState;
-} Transition;
+using namespace std;
+
 
 class State {
-	Transition* transitions;
-	int numTransitions;
-	bool final;
+	string id;  // Identifier for the state. For example: q1, q2, q3, ....qn
+	vector<Transition*> transitions;
+	bool isFinal;
 public:
-	State();
+	State(string id);
 	~State();
 	void SetFinal(bool f);
 	const bool IsFinal();
-	const int GetNumTransitions();
-	void SetMaxPossibleTrans(int max);  // Set maximum possible transitions
-	void NewTransition(char read, char write, char mov, int next);
-	const Transition GetTransition(int inx);
+	string GetId() { return id; };
+	int GetNumTransitions();
+	void NewTransition(string aNext, vector<tapeIO_t> aTapesIO, string aMov);
+	Transition GetTransition(int inx);
+	/*
+	inline bool operator< (const State& lhs, const State& rhs){ return lhs.GetId() < rhs.GetId(); }
+	inline bool operator> (const State& lhs, const State& rhs){ return rhs < lhs; }
+	inline bool operator<=(const State& lhs, const State& rhs){ return !(lhs > rhs); }
+	inline bool operator>=(const State& lhs, const State& rhs){ return !(lhs < rhs); }
+	*/
 };

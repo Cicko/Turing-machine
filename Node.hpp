@@ -7,22 +7,26 @@
 *
 **/
 #include <cstdlib>
+#include <string>
 
-#define INITIA_STATE 0
-#define WHITE '$'
+using namespace std;
+
 
 class Node {
-  char symbol;
+  string symbol;  // with string we can make complex symbols like: a1, a2, a3....
+  string white;   // white symbol.
   Node* right;
   Node* left;
 public:
-  Node();
-  Node(char symbol);
+  Node(string white);
+  Node(string white, string symbol);
   ~Node();
-  void SetSymbol(char symbol);
+  void SetSymbol(string symbol);
+  void SetWhite(string white);
   void SetRight(Node* right);
   void SetLeft(Node* left);
-  const char GetSymbol();
+  string GetSymbol();
+  string GetWhite();
   Node* GetRight ();
   Node* GetLeft ();
 };
