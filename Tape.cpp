@@ -25,8 +25,6 @@ void Tape::LoadInputToTape(vector<string> input){
 	}
 	MoveRight();
 	headPos = 0;
-	cout << "Tape content: " << endl;
-	ShowTape();
 }
 
 
@@ -99,7 +97,7 @@ void Tape::Write(string c){
 void Tape::ShowTape() {
 	Node* aux = init->GetLeft();
 	int it = -1;
-	while(it <= inputLength + 1) {
+	while(it <= inputLength) {
 		cout << "| ";
 		if(it == headPos)
 			cout << "[" << aux->GetSymbol() << "] ";
