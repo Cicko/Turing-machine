@@ -197,6 +197,7 @@ void Turing::Simulate (bool verbose) {
 		cout << "You have to load the machine first" << endl;
 	else {
 		FillTapes ();
+		ShowAllTapesContent();
 	}
 }
 
@@ -210,12 +211,17 @@ void Turing::FillTapes () {
 		do {
 			cout << "Insert symbol " << length++ << ": ";
 			cin >> symbol;
-			if (symbol != "!q") {
+			if (symbol != "!q")
 				inputTape.push_back(symbol);
-			}
 
 		} while (symbol != "!q");
 		tapes[i]->LoadInputToTape(inputTape);
+	}
+}
+
+void Turing::ShowAllTapesContent () {
+	for (int i = 0; i < GetNumTapes(); i++) {
+		cout << "Tape " << i << ": ";
 		tapes[i]->ShowTape();
 	}
 }

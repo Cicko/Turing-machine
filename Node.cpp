@@ -22,7 +22,6 @@ Node::~Node(){
 
 // Setters
 void Node::SetSymbol(string simb){
-  cout << "Symbol: " << simb << endl;
 	symbol = simb;
 }
 void Node::SetWhite(string aWhite) {

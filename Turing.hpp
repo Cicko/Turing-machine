@@ -43,6 +43,7 @@ public:
 	unsigned GetNumTapeSymbols () { return tapeSymbols.size(); }
 
 	void Simulate(bool verbose);  // If verbose then is step by step simulation.
+	void ShowAllTapesContent();
 
 private:
 	void AnalyzeTuple(int i, int state, char movement, int next);

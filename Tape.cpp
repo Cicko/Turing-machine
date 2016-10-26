@@ -15,7 +15,6 @@ void Tape::LoadInputToTape(vector<string> input){
 	head->SetLeft(node);
 
 	while(inputLength < input.size()){       // Travel the whole input to know its size and
-		cout << "Metemos" << input[inputLength] << endl;
 		head->SetSymbol(input[inputLength++]);
     MoveRight();
 	}
@@ -106,5 +105,5 @@ void Tape::ShowTape() {
 		aux = aux->GetRight();
 		it++;
 	}
-	cout << "|" << endl << endl;
+	cout << "|" << endl;
 }
