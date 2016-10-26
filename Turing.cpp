@@ -2,13 +2,18 @@
 
 ///// CONSTRUCTOR Y DESTRUCTOR
 Turing::Turing(){
-	LoadMachine();
+	loadedMachine = false;
+	if (LoadMachine() == 0) {
+		loadedMachine = true;
+		cout << "Turing Machine successfully loaded!." << endl;
+	}
 }
 
 Turing::~Turing(){
 }
 
-void Turing::LoadMachine() {
+
+int Turing::LoadMachine() {
 	ifstream file;
 	string fileName;
 	cout << "Insert the file name: ";
@@ -41,13 +46,16 @@ void Turing::LoadMachine() {
 	      	LoadTransition (temp);
 	    	}
 	      file.close();
+				return 0;
 	  }
 	  else {
-	    cerr << "El fichero no existe" << endl;
+	    cout << "El fichero no existe" << endl;
+			return -1;
 	  }
 	}
 	catch (exception e) {
 		std::cerr << e.what() << endl;
+		return -1;
 	}
 }
 
@@ -181,6 +189,34 @@ void Turing::LoadTransition (string trans) {
 			states[i]->NewTransition(trans, tapes.size());
 			return;
 		}
+	}
+}
+
+void Turing::Simulate (bool verbose) {
+	if (!LoadedMachine())
+		cout << "You have to load the machine first" << endl;
+	else {
+		FillTapes ();
+	}
+}
+
+
+void Turing::FillTapes () {
+	for (int i = 0;i < GetNumTapes(); i++) {
+		cout << "Insert input for the tape " << i << " (press !q to finish it): " << endl;
+		int length = 0;
+		string symbol;
+		vector<string> inputTape;
+		do {
+			cout << "Insert symbol " << length++ << ": ";
+			cin >> symbol;
+			if (symbol != "!q") {
+				inputTape.push_back(symbol);
+			}
+
+		} while (symbol != "!q");
+		tapes[i]->LoadInputToTape(inputTape);
+		tapes[i]->ShowTape();
 	}
 }
 

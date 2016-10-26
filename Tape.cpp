@@ -7,38 +7,20 @@ void Tape::MoveHeadToInit(){
 		MoveLeft();
 }
 
-/*
-void Tape::LoadInputFromKeyboard () {
-	cout << "Insert input: "
-}
-*/
 
-void Tape::LoadInputToTape (vector<string> input) {
-	head = new Node(whiteSymbol);
-	init = head;
+void Tape::LoadInputToTape(vector<string> input){
+	head = new Node (whiteSymbol);
+  init = head;
 	Node* node = new Node(whiteSymbol);
 	head->SetLeft(node);
 
-	for (int i = 0; i < input.size(); i++) {
-		head->SetSymbol(input[0]);
-		MoveRight();
-	}
-}
-
-/*
-void Tape::LoadInputToTape(vector<string> input){
-	head = new Node ();
-  init = head;
-	Node* node = new Node();
-	head->SetLeft(node);
-	//inputLength++;
-
-	while(input[inputLength] != '\0'){       // Travel the whole input to know its size and
+	while(inputLength < input.size()){       // Travel the whole input to know its size and
+		cout << "Metemos" << input[inputLength] << endl;
 		head->SetSymbol(input[inputLength++]);
-    MoveLeft();
+    MoveRight();
 	}
 	MoveLeft();
-	while(head->GetSymbol() != WHITE){
+	while(head->GetSymbol() != whiteSymbol){
 		MoveLeft();
 	}
 	MoveRight();
@@ -46,13 +28,14 @@ void Tape::LoadInputToTape(vector<string> input){
 	cout << "Tape content: " << endl;
 	ShowTape();
 }
-*/
+
 
 Tape::Tape(string white) {
 	whiteSymbol = white;
-  head = NULL;
-	init = NULL;
+  head = new Node(whiteSymbol);
+	init = head;
 	inputLength = 0;
+	headPos = 0;
 }
 
 // Constructors
@@ -60,6 +43,7 @@ Tape::Tape(string white, vector<string> input) {
 	whiteSymbol = white;
   head = NULL;
   init = NULL;
+	headPos = 0;
   inputLength = input.size();;
   LoadInputToTape(input);
 }
@@ -94,7 +78,7 @@ void Tape::Movement(char mov){
 		cerr << "Error_02: Incorrect movement. The movement " << mov << " is not recognized." << endl;
 }
 
-const bool Tape::IsEmpty() {
+bool Tape::IsEmpty() {
   return (0 == inputLength);
 }
 
@@ -112,14 +96,13 @@ void Tape::Write(string c){
 }
 
 
-const void Tape::ShowTape() {
-	Node* aux = init;
-	aux = aux->GetLeft();
+void Tape::ShowTape() {
+	Node* aux = init->GetLeft();
 	int it = -1;
-	while(it <= inputLength + 1){
+	while(it <= inputLength + 1) {
 		cout << "| ";
 		if(it == headPos)
-			cout << "[" << aux->GetSymbol() << "] " ;
+			cout << "[" << aux->GetSymbol() << "] ";
 		else
 			cout << aux->GetSymbol() << " ";
 		aux = aux->GetRight();

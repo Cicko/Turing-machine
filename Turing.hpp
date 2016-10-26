@@ -20,10 +20,12 @@ class Turing {
 	vector<string> finals;   // Final states
 	vector<Tape*> tapes;
 	string actualState;
+	bool loadedMachine;
 public:
 	Turing();
 	~Turing();
-	void LoadMachine ();
+	int LoadMachine ();
+	bool LoadedMachine () { return loadedMachine; }
 
 	void ShowMachine ();
 	void ShowStates ();
@@ -52,4 +54,6 @@ private:
 	void LoadFinalStates (string states);
 	void LoadNumTapes (string num);
 	void LoadTransition (string trans);
+
+	void FillTapes ();
 };

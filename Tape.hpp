@@ -23,14 +23,13 @@ public:
 	Tape(string whiteSymbol);
 	Tape(string whiteSymbol, vector<string> input);
 	~Tape();
-	void MoveRight();
-	void MoveLeft();
-	const bool IsEmpty();
-	string Read();
-	void Write(string c);
-	const void ShowTape();
-	void Movement(char mov);
-private:
 	void LoadInputToTape(vector<string> input);
 	void MoveHeadToInit();
+	void MoveRight();
+	void MoveLeft();
+	bool IsEmpty();
+	string Read();
+	void Write(string c);
+	void ShowTape();
+	void Movement(char mov);
 };
