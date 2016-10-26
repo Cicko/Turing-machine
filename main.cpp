@@ -56,6 +56,7 @@ int main(int argc, char * argv[]) {
 				break;
 			case 4:
         cout << "Exiting.." << endl;
+				break;
 			default:
 				cout << "You have inserted an incorrect option." << endl << endl;
 		}

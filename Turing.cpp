@@ -200,13 +200,13 @@ void Turing::Simulate (bool verbose) {
 	if (!LoadedMachine())
 		cout << "You have to load the machine first" << endl;
 	else {
+		actualState = initialState;
 		FillTapes ();
 		cout << "Initial Tapes content: " << endl;
 		ShowAllTapesContent();
 
 		for (int i = 0; i < actualState->GetNumTransitions(); i++) {
 			Transition * actualTrans = actualState->GetTransition(i);
-			actualTrans->ShowTransition();
 			if (CorrectTransition(actualTrans)) {
 				if (verbose)
 					actualTrans->ShowTransition();
@@ -214,30 +214,38 @@ void Turing::Simulate (bool verbose) {
 				actualState = GetStateById(actualTrans->GetTo());
 
 				for (int j = 0; j < GetNumTapes(); j++) {
-					tapes[j]->Write(actualTrans->GetTapesWM()[j].first);
-					tapes[j]->Movement(actualTrans->GetTapesWM()[j].second);
+					tapes[j]->Write(actualTrans->GetTapesWM()[j].first);  // first --> Writes
+					tapes[j]->Movement(actualTrans->GetTapesWM()[j].second); // second --> Movement
 				}
 				if (verbose)
 					ShowAllTapesContent();
 				i = -1;
 			}
 		}
+		if (actualState->IsFinal()) {
+			cout << "Result: " << endl;
+			ShowAllTapesContent();
+			cout << "The input is accepted!! Congratulations" << endl;
+		}
+		else
+			cout << "Sorry... but you input is not accepted.." << endl;
 	}
 }
 
 
+
 void Turing::FillTapes () {
 	for (int i = 0;i < GetNumTapes(); i++) {
-		cout << "Insert input for the tape " << i << " (press !q to finish it): " << endl;
+		cout << "Insert input for the tape " << i << " (type 'quit' to finish it): " << endl;
 		int length = 0;
 		string symbol;
 		vector<string> inputTape;
 		do {
 			cout << "Insert symbol " << length++ << ": ";
 			cin >> symbol;
-			if (symbol != "!q")
+			if (symbol != "quit")
 				inputTape.push_back(symbol);
-		} while (symbol != "!q");
+		} while (symbol != "quit");
 		tapes[i]->LoadInputToTape(inputTape);
 	}
 }

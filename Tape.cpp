@@ -13,6 +13,7 @@ void Tape::LoadInputToTape(vector<string> input){
   init = head;
 	Node* node = new Node(whiteSymbol);
 	head->SetLeft(node);
+	inputLength = 0;
 
 	while(inputLength < input.size()){       // Travel the whole input to know its size and
 		head->SetSymbol(input[inputLength++]);
@@ -49,6 +50,7 @@ Tape::~Tape(){
 	head = NULL;
 	inputLength = 0;
 }
+
 
 // public methods
 void Tape::MoveRight(){
