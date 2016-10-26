@@ -29,6 +29,7 @@ public:
 	int GetNumTransitions();
 	void NewTransition (string transition, int numTapes);
 	Transition GetTransition(int inx);
+	void ShowAllTransitions ();
 private:
-	void NewTransition(string aNext, vector<tapeWM_t> aTapesIO, string aMov);
+	void NewTransition(string to, vector<string> input, vector<tapeWM_t> aTapesWM);
 };

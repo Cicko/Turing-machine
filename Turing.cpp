@@ -17,42 +17,42 @@ Turing::~Turing(){
 }
 
 ///// FUNCIONES PRIVADAS
-void Turing::ReadStates (string states) {
+void Turing::LoadStates (string states) {
 	vector<string> aStates = utils::lineToStrings (states, " ");
 	for (int i = 0;i < aStates.size(); i++) {
 			states.push_back(new State(aStates[i]));
 	}
 }
 
-void Turing::ReadInputSymbols (string symbols) {
+void Turing::LoadInputSymbols (string symbols) {
 	inputSymbols = utils::lineToStrings (symbols, " ");
 }
 
-void Turing::ReadTapeSymbols (string symbols) {
+void Turing::LoadTapeSymbols (string symbols) {
   tapeSymbols = utils::lineToStrings (symbols, " ");
 }
 
-void Turing::ReadInitialState (string state) {
+void Turing::LoadInitialState (string state) {
   initialState = state;
   actualState = initialState;
 }
 
-void Turing::ReadWhiteSymbol (string symbol) {
+void Turing::LoadWhiteSymbol (string symbol) {
 	whiteSymbol = symbol;
 }
 
-void Turing::ReadFinalStates (string states) {
+void Turing::LoadFinalStates (string states) {
 	finals = utils::lineToStrings(states, " ");
 }
 
-void Turing::ReadNumTapes (string num) {
+void Turing::LoadNumTapes (string num) {
 	int numTapes = stoi(num);
 	for (int i = 0;i < numTapes; i++) {
 		tapes.push_back(new Tape());
 	}
 }
 
-void Turing::ReadTransition (string trans) {
+void Turing::LoadTransition (string trans) {
 	vector<string> transition = utils::lineToStrings(trans, " ");
 	string transOrigState = transition[0];  // Transition's origin state
 	for (int i = 0; i < states.size(); i++) {
@@ -63,27 +63,7 @@ void Turing::ReadTransition (string trans) {
 	}
 }
 
-void Turing::SetFinals() {
-	for(int i = 0;i < numStates; i++)
-			(i >= (final))? states[i].SetFinal(true): states[i].SetFinal(false);
-}
 
-void Turing::SetNumTapes(unsigned num) {
-	for (int i = 0;i < num; i++) {
-		tapes.add(new Tape)
-	}
-}
-
-void Turing::CheckFileHead() {
-	if (numStates < 1) {
-		cerr << "Error: The number of states is incorrect." << endl;
-		system("exit");
-	}
-	if (final < 0 || final > numStates) {
-		cerr << "Error : The final state starter is incorrect" << endl;
-		system("exit");
-	}
-}
 
 void Turing::AnalyzeTuple(int i, int state, char movement, int next) {
 	if(state < 0 || state > numStates){
@@ -112,20 +92,22 @@ void Turing::LoadMachine() {
   if (file.is_open()) {
       string temp;
       getline (file, temp);
-      ReadStates (temp);
+      LoadStates (temp);
       getline (file, temp);
-	    ReadInputSymbols (temp);
+	    LoadInputSymbols (temp);
 			getline (file, temp);
-      ReadTapeSymbols(temp);
+      LoadTapeSymbols(temp);
       getline (file, temp);
-      ReadInitialState(temp);
+      LoadInitialState(temp);
       getline (file, temp);
-      readInitialStackSymbol (temp);
+      LoadWhiteSymbol(temp);
       getline (file, temp);
-      readFinalStates (temp);
+      LoadFinalStates (temp);
+			getline (file, temp);
+			LoadNumTapes (temp);
       while (!file.eof()) {
         getline (file, temp);
-        saveTransition (temp);
+        LoadTransition (temp);
       }
       file.close();
   }
@@ -134,66 +116,83 @@ void Turing::LoadMachine() {
   }
 }
 
-/*
-//// Public functions
-void Turing::LoadMachine(){
-	ifstream fich;
-	char name[40];
-	int state,next;
-	char reads,writes,movement;
-	cout << "Insert the file name: ";
-	cin >> name;
-	fich.open(name);
-	if(!fich.is_open()){
-		cout << "Error_0: Error occurs during file opening." << endl;
-		system("exit");
-	}
-	fich >> numStates;
-
-	fich >> final;
-	fich >> numTrans;
-	CheckFileHead();
-	//states = new State [numStates];
-	SetFinals();
-	// Loading transitions
-	for(int i = 0; i < numTrans; i++){
-		State newState;
-		fich >> state;
-		fich >> reads;
-		fich >> writes;
-		fich >> movement;
-		fich >> next;
-		AnalyzeTuple(i,state,movement,next);
-		newState.NewTransition(reads,writes,movement,next);
-		states.push_back(newState);
-		//states[state].NewTransition(reads,writes,movement,next);
-	}
-	fich.close();
-}
-*/
 
 void Turing::ShowMachine(){
-	if(states == NULL)
+	if(GetNumStates() == 0)
 		cout << endl << "You have to load the machine first. " << endl;
 	else {
-		Transition transition;
-		cout << endl << "TURING MACHINE: " << endl << endl << endl;
-		cout << states.size() << endl;
-		cout << final << endl;
-		cout << numTrans << endl;
-		for(int i = 0; i < states.size(); i++) {
-			for(int j = 0; j < states[i].GetNumTransitions(); j++) {
-				transition = states[i].GetTransition(j); // la variable transition contiene la transition j del state i.
-				cout << i << " ";
-				cout << transition.reads << " ";
-				cout << transition.writes << " ";
-				cout << transition.movement << " ";
-				cout << transition.nextState << " ";
-				cout << endl;
-			}
+		cout << endl << "---- TURING MACHINE ---- " << endl << endl << endl;
+		ShowStates();
+		ShowInputSymbols();
+		ShowTapeSymbols ();
+		ShowInitialState ();
+		ShowWhiteSymbol ();
+		ShowFinalStates ();
+		ShowNumTapes ();
+		ShowTransitions ();
+	}
+}
+
+void Turing::ShowStates () {
+	cout << "States: {";
+	for (int i = 0; i < GetNumStates(); i++) {
+		cout << states[i]->GetId();
+		if (i < GetNumStates() - 1)
+			cout << ", ";
+		else
+			cout << "}" << endl;
+	}
+}
+
+void Turing::ShowInputSymbols () {
+	cout << "Input symbols: {";
+	for (int i = 0; i < GetNumInputSymbols(); i++) {
+		cout << inputSymbols[i];
+		if (i < GetNumInputSymbols() - 1)
+			cout << ", ";
+		else
+			cout << "}" << endl;
+	}
+}
+void Turing::ShowTapeSymbols () {
+	cout << "Tape symbols: {";
+	for (int i = 0; i < GetNumTapeSymbols(); i++) {
+		cout << tapeSymbols[i];
+		if (i < GetNumTapeSymbols() - 1)
+			cout << ", ";
+		else
+			cout << "}" << endl;
+	}
+}
+void Turing::ShowInitialState () {
+	cout << "Initial state: " << initialState << endl;
+}
+void Turing::ShowWhiteSymbol () {
+	cout << "White symbol: " << whiteSymbol << endl;
+}
+void Turing::ShowFinalStates () {
+	cout << "Final states: {";
+	for (int i = 0; i < GetNumStates(); i++) {
+		if (states[i]->IsFinal()) {
+			cout << states[i]->GetId();
+			if (i < GetNumStates() - 1)
+				cout << ", ";
+			else
+				cout << "}" << endl;
 		}
 	}
 }
+
+void Turing::ShowNumTapes () {
+	cout << "Number of tapes: " << GetNumTapes() << endl;
+}
+void Turing::ShowTransitions () {
+	cout << "Transitions: " << endl;
+	for (int i = 0; i < GetNumStates(); i++) {
+		states[i]->ShowAllTransitions();
+	}
+}
+/*
 void Turing::Simulate(bool verbose){
 	if(states == NULL)
 		cout << endl << "You have to load the Turing machine first.  " << endl;
@@ -237,3 +236,4 @@ void Turing::Simulate(bool verbose){
 			cout << endl << "The input is NOT accepted" << endl;
 	}
 }
+*/

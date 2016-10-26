@@ -1,0 +1,16 @@
+q0 q1 q2 q3
+a b
+a b ·
+q0
+·
+q3
+2
+q0 a · q0 a a R R
+q0 b · q0 b b R R
+q0 · · q1 · · L S
+q1 a · q1 a · L S
+q1 b · q1 b · L S
+q1 · · q2 · · R L
+q2 a a q2 a a R L
+q2 b b q2 b b R L
+q2 · · q3 · · R L

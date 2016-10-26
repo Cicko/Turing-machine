@@ -22,21 +22,33 @@ class Turing {
 public:
 	Turing();
 	~Turing();
-	void LoadMachine();
-	void ShowMachine();
+	void LoadMachine ();
+
+	void ShowMachine ();
+	void ShowStates ();
+	void ShowInputSymbols ();
+	void ShowTapeSymbols ();
+	void ShowInitialState ();
+	void ShowWhiteSymbol ();
+	void ShowFinalStates ();
+	void ShowNumTapes ();
+	void ShowTransitions ();
+
+	unsigned GetNumTapes () { return tapes.size(); }
+	unsigned GetNumStates () { return states.size(); }
+	unsigned GetNumInputSymbols () { return inputSymbols.size(); }
+	unsigned GetNumTapeSymbols () { return tapeSymbols.size(); }
+
 	void Simulate(bool verbose);  // If verbose then is step by step simulation.
-//	void comprobarFinales();
+
 private:
-	void SetFinals();
-	void CheckFileHead();
-	void SetNumTapes(unsigned);
 	void AnalyzeTuple(int i, int state, char movement, int next);
-	void ReadStates (string states);
-	void ReadInputSymbols (string symbols);
-	void ReadTapeSymbols (string symbols);
-	void ReadInitialState (string state);
-	void ReadWhiteSymbol (string symbol);
-	void ReadFinalStates (string states);
-	void ReadNumTapes (string num);
-	void ReadTransition (string trans);
+	void LoadStates (string states);
+	void LoadInputSymbols (string symbols);
+	void LoadTapeSymbols (string symbols);
+	void LoadInitialState (string state);
+	void LoadWhiteSymbol (string symbol);
+	void LoadFinalStates (string states);
+	void LoadNumTapes (string num);
+	void LoadTransition (string trans);
 };

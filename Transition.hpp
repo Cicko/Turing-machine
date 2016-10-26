@@ -13,20 +13,24 @@
 
 using namespace std;
 
-
 class Transition {
-  string next;                // Next state
+  string from;                // From state
+  string to;                  // To state
   vector<string> input;       // input that reads from n tapes.
   vector<tapeWM_t> tapesWM;   // Write and move on a n tapes.
 public:
-  Transition(string next, vector<string> input, vector<tapeWM_t> tapesWM);
+  Transition(string from, string to, vector<string> input, vector<tapeWM_t> tapesWM);
   ~Transition();
 
-  void SetNext(string);
+  void SetFrom(string);
+  void SetTo(string);
   void SetInput(vector<string> input);
-  void SetTapesIO(vector<tapeWM_t> tapesIO);
+  void SetTapesIO(vector<tapeWM_t> tapesWM);
 
-  string GetNext () { return next; }
+  string GetFrom () { return from; }
+  string GetTo () { return to; }
   vector<string> GetInput () { return input; }
   vector<tapeWM_t> GetTapesIO () { return tapesWM; }
+
+  void ShowTransition ();
 }
