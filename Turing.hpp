@@ -15,11 +15,11 @@ class Turing {
 	vector<State*> states;
 	vector<string> inputSymbols;
 	vector<string> tapeSymbols;
-	string initialState;
+	State* initialState;
 	string whiteSymbol;
 	vector<string> finals;   // Final states
 	vector<Tape*> tapes;
-	string actualState;
+	State* actualState;
 	bool loadedMachine;
 public:
 	Turing();
@@ -45,6 +45,8 @@ public:
 	void Simulate(bool verbose);  // If verbose then is step by step simulation.
 	void ShowAllTapesContent();
 
+
+
 private:
 	void AnalyzeTuple(int i, int state, char movement, int next);
 	void LoadStates (string states);
@@ -57,4 +59,6 @@ private:
 	void LoadTransition (string trans);
 
 	void FillTapes ();
+	State* GetStateById (string id);
+	bool CorrectTransition (Transition* tran);
 };

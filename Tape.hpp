@@ -32,4 +32,5 @@ public:
 	void Write(string c);
 	void ShowTape();
 	void Movement(char mov);
+	void Movement(string mov);
 };

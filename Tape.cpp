@@ -65,6 +65,10 @@ void Tape::MoveLeft(){
 	head->SetRight(aux);
 }
 
+void Tape::Movement(string mov) {
+	Movement(mov[0]);
+}
+
 void Tape::Movement(char mov){
 	if(mov == 'L')
 		MoveLeft();

@@ -108,7 +108,7 @@ void Turing::ShowTapeSymbols () {
 	}
 }
 void Turing::ShowInitialState () {
-	cout << "Initial state: " << initialState << endl;
+	cout << "Initial state: " << initialState->GetId() << endl;
 }
 void Turing::ShowWhiteSymbol () {
 	cout << "White symbol: " << whiteSymbol << endl;
@@ -155,8 +155,12 @@ void Turing::LoadTapeSymbols (string symbols) {
 }
 
 void Turing::LoadInitialState (string state) {
-  initialState = state;
-  actualState = initialState;
+	for (int i = 0; i < GetNumStates(); i++) {
+		if(states[i]->GetId() == state) {
+			initialState = states[i];
+			actualState = initialState;
+		}
+	}
 }
 
 void Turing::LoadWhiteSymbol (string symbol) {
@@ -197,7 +201,27 @@ void Turing::Simulate (bool verbose) {
 		cout << "You have to load the machine first" << endl;
 	else {
 		FillTapes ();
+		cout << "Initial Tapes content: " << endl;
 		ShowAllTapesContent();
+
+		for (int i = 0; i < actualState->GetNumTransitions(); i++) {
+			Transition * actualTrans = actualState->GetTransition(i);
+			actualTrans->ShowTransition();
+			if (CorrectTransition(actualTrans)) {
+				if (verbose)
+					actualTrans->ShowTransition();
+
+				actualState = GetStateById(actualTrans->GetTo());
+
+				for (int j = 0; j < GetNumTapes(); j++) {
+					tapes[j]->Write(actualTrans->GetTapesWM()[j].first);
+					tapes[j]->Movement(actualTrans->GetTapesWM()[j].second);
+				}
+				if (verbose)
+					ShowAllTapesContent();
+				i = -1;
+			}
+		}
 	}
 }
 
@@ -213,7 +237,6 @@ void Turing::FillTapes () {
 			cin >> symbol;
 			if (symbol != "!q")
 				inputTape.push_back(symbol);
-
 		} while (symbol != "!q");
 		tapes[i]->LoadInputToTape(inputTape);
 	}
@@ -226,69 +249,19 @@ void Turing::ShowAllTapesContent () {
 	}
 }
 
-
-
-/*
-void Turing::AnalyzeTuple(int i, int state, char movement, int next) {
-	if(state < 0 || state > numStates){
-		cerr << "Error at line " << i+4 << " in the file. " << endl;
-		cerr << "The state " << state << " should be between 0 and " << numStates-1 << endl;
-		system("exit");
-	}
-	if(movement != 'L' && movement != 'R' && movement != 'S'){
-		cerr << "Error when reads the movement at line " << i+4 << endl;
-		cerr << "It was movement " << movement << " and only can be 'L' , 'R' or 'S' ." << endl;
-		system("exit");
-	}
-	if(next < 0 || next > numStates){
-		cerr << "Error at line " << i+4 << " in the file. " << endl;
-		cerr << "State " << state << " have to be between 0 and " << numStates-1 << endl;
-		system("exit");
+State* Turing::GetStateById (string id) {
+	for (int i = 0; i < GetNumStates(); i++) {
+		if (id == states[i]->GetId())
+			return states[i];
 	}
 }
-*/
-/*
-void Turing::Simulate(bool verbose){
-	if(states == NULL)
-		cout << endl << "You have to load the Turing machine first.  " << endl;
-	else {
-		char opc;
-		char cadena[100];
-		int actualState = initialState;
-		cout << "Insert an input string: ";
-		cin >> cadena;
-		tapes = new Tape(cadena);
-		cout << "Initial Tape : " << endl;
-		cout << endl ;
-		cin.get();
-		for(int i = 0; i < states[actualState].GetNumTransitions(); i++) {
-			Transition Tactual = states[actualState].GetTransition(i);
-			if(Tactual.reads == tapes->-Read()) {
-				if(verbose) {
-					tapes->ShowTape();
-					cout << "State actual : " << actualState << endl ;
-					cout << "Read : '" << tapes->Read() << "' -----> writes '" << Tactual.writes << "' " << endl ;
-					cout << "Moving to " << Tactual.movement << endl ;
-					cout << endl << endl;
-				}
-				tapes->Write(Tactual.writes);
-				tapes->Movement(Tactual.movement);
-				actualState = Tactual.nextState;
-				i = -1; // Le obligamos a repetir el for con i=0
-					if(verbose) {
-						cout <<"Press Return button to next step:";
-						cin.get();
-						system("clear");
-					}
-			}
+
+// It compare the symbols at the tapes and the input symbols of the transition.
+bool Turing::CorrectTransition (Transition* trans) {
+	for (int i = 0; i < GetNumTapes(); i++) {
+		if (tapes[i]->Read() != trans->GetInput()[i]) {
+			return false;
 		}
-		cout << "Final tape: " << endl;
-		tapes->ShowTape();
-		cout << "Finished at state: " << actualState << endl;
-		if(states[actualState].IsFinal())
-			cout << endl << "The input is accepted" << endl;
-		else
-			cout << endl << "The input is NOT accepted" << endl;
 	}
+	return true;
 }
-*/
