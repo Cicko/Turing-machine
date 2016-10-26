@@ -1,5 +1,9 @@
 #include "State.hpp"
 
+void State::NewTransition(string next, vector<tapeIO_t> tapesIO, string mov) {
+  transitions.push_back(new Transition(next, tapesIO, mov));
+}
+
 State::State(string anId) {
   id = anId;
   isFinal = false;
@@ -23,9 +27,12 @@ int State::GetNumTransitions() {
   return transitions.size();
 }
 
-void State::NewTransition(string next, vector<tapeIO_t> tapesIO, string mov) {
-  transitions.push_back(new Transition(next, tapesIO, mov));
+void State::NewTransition (string transition, int numTapes) {
+  vector<string> trans = utils::lineToStrings(transition, " ");
+  
+
 }
+
 
 Transition State::GetTransition(int inx) {
 		return transitions[inx];

@@ -1,9 +1,9 @@
 #include "Transition.hpp"
 
-Transition::Transition(string aNext, vector<tapeIO_t> aTapesIO, string aMov) {
+Transition::Transition(string aNext, vector<string> anInput, vector<tapeWM_t> aTapesWM) {
   SetNext(aNext);
-  SetTapesIO(aTapesIO);
-  SetMovement(aMov);
+  SetInput(anInput);
+  SetTapesIO(aTapesWM);
 }
 
 ~Transition() {}
@@ -11,9 +11,9 @@ Transition::Transition(string aNext, vector<tapeIO_t> aTapesIO, string aMov) {
 void Transition::SetNext(string aNext) {
   next = aNext;
 }
-void Transition::SetTapesIO(vector<tapeIO_t> aTapesIO) {
-  tapesIO = aTapesIO;
+void Transition::SetInput(vector<string> anInput) {
+  input = anInput;
 }
-void Transition::SetMovement(string mov) {
-  movement = mov;
+void Transition::SetTapesIO(vector<tapeWM_t> aTapesWM) {
+  tapesWM = aTapesWM;
 }

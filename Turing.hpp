@@ -11,11 +11,14 @@
 using namespace std;
 
 class Turing {
-	State* initialState;
 	vector<State*> states;
-	vector<State*> finals;
-	vector<Tape*> tapes; // Para multicinta ser�a : �� Cinta** cintas_ ??
+	vector<string> inputSymbols;
 	vector<string> tapeSymbols;
+	string initialState;
+	string whiteSymbol;
+	vector<string> finals;   // Final states
+	vector<Tape*> tapes;
+	string actualState;
 public:
 	Turing();
 	~Turing();
@@ -29,5 +32,11 @@ private:
 	void SetNumTapes(unsigned);
 	void AnalyzeTuple(int i, int state, char movement, int next);
 	void ReadStates (string states);
+	void ReadInputSymbols (string symbols);
 	void ReadTapeSymbols (string symbols);
+	void ReadInitialState (string state);
+	void ReadWhiteSymbol (string symbol);
+	void ReadFinalStates (string states);
+	void ReadNumTapes (string num);
+	void ReadTransition (string trans);
 };

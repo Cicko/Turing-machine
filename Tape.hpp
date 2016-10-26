@@ -17,6 +17,7 @@ class Tape{
 	int headPos;
 	int inputLength;
 public:
+	Tape();
 	Tape(char* input);
 	~Tape();
 	void MoveRight();

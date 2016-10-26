@@ -28,6 +28,11 @@ void Tape::LoadInputToTape(char* input){
 	ShowTape();
 }
 
+Tape::Tape() {
+  head = NULL;
+	init = NULL;
+	inputLength = 0;
+}
 
 // Constructors
 Tape::Tape(char* input) {

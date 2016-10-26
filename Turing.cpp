@@ -24,8 +24,43 @@ void Turing::ReadStates (string states) {
 	}
 }
 
-void PushDownAutomaton::ReadTapeSymbols (string symbols) {
+void Turing::ReadInputSymbols (string symbols) {
+	inputSymbols = utils::lineToStrings (symbols, " ");
+}
+
+void Turing::ReadTapeSymbols (string symbols) {
   tapeSymbols = utils::lineToStrings (symbols, " ");
+}
+
+void Turing::ReadInitialState (string state) {
+  initialState = state;
+  actualState = initialState;
+}
+
+void Turing::ReadWhiteSymbol (string symbol) {
+	whiteSymbol = symbol;
+}
+
+void Turing::ReadFinalStates (string states) {
+	finals = utils::lineToStrings(states, " ");
+}
+
+void Turing::ReadNumTapes (string num) {
+	int numTapes = stoi(num);
+	for (int i = 0;i < numTapes; i++) {
+		tapes.push_back(new Tape());
+	}
+}
+
+void Turing::ReadTransition (string trans) {
+	vector<string> transition = utils::lineToStrings(trans, " ");
+	string transOrigState = transition[0];  // Transition's origin state
+	for (int i = 0; i < states.size(); i++) {
+		if (transOrigState == states[i]->GetId()) {
+			states[i]->NewTransition(trans, tapes.size());
+			return;
+		}
+	}
 }
 
 void Turing::SetFinals() {
@@ -79,11 +114,11 @@ void Turing::LoadMachine() {
       getline (file, temp);
       ReadStates (temp);
       getline (file, temp);
-      readInputSymbols(temp);
+	    ReadInputSymbols (temp);
+			getline (file, temp);
+      ReadTapeSymbols(temp);
       getline (file, temp);
-      readStackSymbols(temp);
-      getline (file, temp);
-      readInitialState(temp);
+      ReadInitialState(temp);
       getline (file, temp);
       readInitialStackSymbol (temp);
       getline (file, temp);

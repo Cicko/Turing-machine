@@ -9,8 +9,9 @@
 #include <cstdlib>
 #include <string>
 #include <vector>
+#include "Utils.hpp"
 #include "Transition.hpp"
-#include "tapeIO_t.hpp"
+#include "tapeWM_t.hpp"
 
 using namespace std;
 
@@ -26,12 +27,8 @@ public:
 	const bool IsFinal();
 	string GetId() { return id; };
 	int GetNumTransitions();
-	void NewTransition(string aNext, vector<tapeIO_t> aTapesIO, string aMov);
+	void NewTransition (string transition, int numTapes);
 	Transition GetTransition(int inx);
-	/*
-	inline bool operator< (const State& lhs, const State& rhs){ return lhs.GetId() < rhs.GetId(); }
-	inline bool operator> (const State& lhs, const State& rhs){ return rhs < lhs; }
-	inline bool operator<=(const State& lhs, const State& rhs){ return !(lhs > rhs); }
-	inline bool operator>=(const State& lhs, const State& rhs){ return !(lhs < rhs); }
-	*/
+private:
+	void NewTransition(string aNext, vector<tapeWM_t> aTapesIO, string aMov);
 };
