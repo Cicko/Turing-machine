@@ -2,118 +2,54 @@
 
 ///// CONSTRUCTOR Y DESTRUCTOR
 Turing::Turing(){
-	numStates = 0;
-
-	final = 0;
-	states = NULL;
-	tapes = NULL;
+	LoadMachine();
+	cout << "Terminamos de construir" << endl;
 }
 
 Turing::~Turing(){
-	numStates = 0;
-	final = 0;
-	states = NULL;
-	tapes = NULL;
-}
-
-///// FUNCIONES PRIVADAS
-void Turing::LoadStates (string states) {
-	vector<string> aStates = utils::lineToStrings (states, " ");
-	for (int i = 0;i < aStates.size(); i++) {
-			states.push_back(new State(aStates[i]));
-	}
-}
-
-void Turing::LoadInputSymbols (string symbols) {
-	inputSymbols = utils::lineToStrings (symbols, " ");
-}
-
-void Turing::LoadTapeSymbols (string symbols) {
-  tapeSymbols = utils::lineToStrings (symbols, " ");
-}
-
-void Turing::LoadInitialState (string state) {
-  initialState = state;
-  actualState = initialState;
-}
-
-void Turing::LoadWhiteSymbol (string symbol) {
-	whiteSymbol = symbol;
-}
-
-void Turing::LoadFinalStates (string states) {
-	finals = utils::lineToStrings(states, " ");
-}
-
-void Turing::LoadNumTapes (string num) {
-	int numTapes = stoi(num);
-	for (int i = 0;i < numTapes; i++) {
-		tapes.push_back(new Tape());
-	}
-}
-
-void Turing::LoadTransition (string trans) {
-	vector<string> transition = utils::lineToStrings(trans, " ");
-	string transOrigState = transition[0];  // Transition's origin state
-	for (int i = 0; i < states.size(); i++) {
-		if (transOrigState == states[i]->GetId()) {
-			states[i]->NewTransition(trans, tapes.size());
-			return;
-		}
-	}
-}
-
-
-
-void Turing::AnalyzeTuple(int i, int state, char movement, int next) {
-	if(state < 0 || state > numStates){
-		cerr << "Error at line " << i+4 << " in the file. " << endl;
-		cerr << "The state " << state << " should be between 0 and " << numStates-1 << endl;
-		system("exit");
-	}
-	if(movement != 'L' && movement != 'R' && movement != 'S'){
-		cerr << "Error when reads the movement at line " << i+4 << endl;
-		cerr << "It was movement " << movement << " and only can be 'L' , 'R' or 'S' ." << endl;
-		system("exit");
-	}
-	if(next < 0 || next > numStates){
-		cerr << "Error at line " << i+4 << " in the file. " << endl;
-		cerr << "State " << state << " have to be between 0 and " << numStates-1 << endl;
-		system("exit");
-	}
 }
 
 void Turing::LoadMachine() {
 	ifstream file;
-	char name[40];
+	string fileName;
 	cout << "Insert the file name: ";
-	cin >> name;
-  file.open(name);
-  if (file.is_open()) {
-      string temp;
-      getline (file, temp);
-      LoadStates (temp);
-      getline (file, temp);
-	    LoadInputSymbols (temp);
-			getline (file, temp);
-      LoadTapeSymbols(temp);
-      getline (file, temp);
-      LoadInitialState(temp);
-      getline (file, temp);
-      LoadWhiteSymbol(temp);
-      getline (file, temp);
-      LoadFinalStates (temp);
-			getline (file, temp);
-			LoadNumTapes (temp);
-      while (!file.eof()) {
-        getline (file, temp);
-        LoadTransition (temp);
-      }
-      file.close();
-  }
-  else {
-    cerr << "El fichero no existe" << endl;
-  }
+	cin >> fileName;
+
+	try {
+  	file.open(fileName.c_str(), ios::in);
+		if(file.fail()) cerr << "Error: " << strerror(errno) << endl;
+
+	  if (file.is_open()) {
+	      string temp;
+	      getline (file, temp);
+	      LoadStates (temp);
+	      getline (file, temp);
+		    LoadInputSymbols (temp);
+				getline (file, temp);
+	      LoadTapeSymbols(temp);
+	      getline (file, temp);
+	      LoadInitialState(temp);
+	      getline (file, temp);
+	      LoadWhiteSymbol(temp);
+	      getline (file, temp);
+	      LoadFinalStates (temp);
+				getline (file, temp);
+				LoadNumTapes (temp);
+
+	    	while (true) {
+	      	getline (file, temp);
+					if (temp.size() < 1) break; // We reach the end of file.
+	      	LoadTransition (temp);
+	    	}
+	      file.close();
+	  }
+	  else {
+	    cerr << "El fichero no existe" << endl;
+	  }
+	}
+	catch (exception e) {
+		std::cerr << e.what() << endl;
+	}
 }
 
 
@@ -192,6 +128,84 @@ void Turing::ShowTransitions () {
 		states[i]->ShowAllTransitions();
 	}
 }
+
+
+///// FUNCIONES PRIVADAS
+void Turing::LoadStates (string statesStr) {
+	vector<string> aStates = utils::lineToStrings (statesStr, " ");
+	for (int i = 0;i < aStates.size(); i++) {
+			State* newState = new State(aStates[i]);
+			states.push_back(newState);
+	}
+}
+
+void Turing::LoadInputSymbols (string symbols) {
+	inputSymbols = utils::lineToStrings (symbols, " ");
+}
+
+void Turing::LoadTapeSymbols (string symbols) {
+  tapeSymbols = utils::lineToStrings (symbols, " ");
+}
+
+void Turing::LoadInitialState (string state) {
+  initialState = state;
+  actualState = initialState;
+}
+
+void Turing::LoadWhiteSymbol (string symbol) {
+	whiteSymbol = symbol;
+}
+
+void Turing::LoadFinalStates (string statesStr) {
+	finals = utils::lineToStrings(statesStr, " ");
+
+	for (int i = 0; i < finals.size(); i++) {
+		for (int j = 0; j < states.size(); j++) {
+			if (finals[i] == states[j]->GetId())
+				states[j]->SetFinal(true);
+		}
+	}
+}
+
+void Turing::LoadNumTapes (string num) {
+	int numTapes = stoi(num);
+	for (int i = 0;i < numTapes; i++) {
+		tapes.push_back(new Tape(whiteSymbol));
+	}
+}
+
+void Turing::LoadTransition (string trans) {
+	vector<string> transition = utils::lineToStrings(trans, " ");
+	string transOrigState = transition[0];  // Transition's origin state
+	for (int i = 0; i < states.size(); i++) {
+		if (transOrigState == states[i]->GetId()) {
+			states[i]->NewTransition(trans, tapes.size());
+			return;
+		}
+	}
+}
+
+
+
+/*
+void Turing::AnalyzeTuple(int i, int state, char movement, int next) {
+	if(state < 0 || state > numStates){
+		cerr << "Error at line " << i+4 << " in the file. " << endl;
+		cerr << "The state " << state << " should be between 0 and " << numStates-1 << endl;
+		system("exit");
+	}
+	if(movement != 'L' && movement != 'R' && movement != 'S'){
+		cerr << "Error when reads the movement at line " << i+4 << endl;
+		cerr << "It was movement " << movement << " and only can be 'L' , 'R' or 'S' ." << endl;
+		system("exit");
+	}
+	if(next < 0 || next > numStates){
+		cerr << "Error at line " << i+4 << " in the file. " << endl;
+		cerr << "State " << state << " have to be between 0 and " << numStates-1 << endl;
+		system("exit");
+	}
+}
+*/
 /*
 void Turing::Simulate(bool verbose){
 	if(states == NULL)

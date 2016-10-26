@@ -28,7 +28,7 @@ public:
 	string GetId() { return id; };
 	int GetNumTransitions();
 	void NewTransition (string transition, int numTapes);
-	Transition GetTransition(int inx);
+	Transition* GetTransition(int inx);
 	void ShowAllTransitions ();
 private:
 	void NewTransition(string to, vector<string> input, vector<tapeWM_t> aTapesWM);

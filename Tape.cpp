@@ -7,7 +7,26 @@ void Tape::MoveHeadToInit(){
 		MoveLeft();
 }
 
-void Tape::LoadInputToTape(char* input){
+/*
+void Tape::LoadInputFromKeyboard () {
+	cout << "Insert input: "
+}
+*/
+
+void Tape::LoadInputToTape (vector<string> input) {
+	head = new Node(whiteSymbol);
+	init = head;
+	Node* node = new Node(whiteSymbol);
+	head->SetLeft(node);
+
+	for (int i = 0; i < input.size(); i++) {
+		head->SetSymbol(input[0]);
+		MoveRight();
+	}
+}
+
+/*
+void Tape::LoadInputToTape(vector<string> input){
 	head = new Node ();
   init = head;
 	Node* node = new Node();
@@ -27,18 +46,21 @@ void Tape::LoadInputToTape(char* input){
 	cout << "Tape content: " << endl;
 	ShowTape();
 }
+*/
 
-Tape::Tape() {
+Tape::Tape(string white) {
+	whiteSymbol = white;
   head = NULL;
 	init = NULL;
 	inputLength = 0;
 }
 
 // Constructors
-Tape::Tape(char* input) {
+Tape::Tape(string white, vector<string> input) {
+	whiteSymbol = white;
   head = NULL;
   init = NULL;
-  inputLength = 0;
+  inputLength = input.size();;
   LoadInputToTape(input);
 }
 
@@ -76,13 +98,15 @@ const bool Tape::IsEmpty() {
   return (0 == inputLength);
 }
 
-const char Tape::Read() {
+string Tape::Read() {
 	return head->GetSymbol();
 }
 
-void Tape::Write(char c){
-	if(head->GetSymbol() == WHITE)
-    if(c != WHITE)
+
+// ARREGLAR
+void Tape::Write(string c){
+	if(head->GetSymbol() == whiteSymbol)
+    if(c != whiteSymbol)
 			inputLength++;
 	head->SetSymbol(c);
 }

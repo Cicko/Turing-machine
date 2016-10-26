@@ -30,7 +30,7 @@ public:
   string GetFrom () { return from; }
   string GetTo () { return to; }
   vector<string> GetInput () { return input; }
-  vector<tapeWM_t> GetTapesIO () { return tapesWM; }
+  vector<tapeWM_t> GetTapesWM () { return tapesWM; }
 
   void ShowTransition ();
-}
+};

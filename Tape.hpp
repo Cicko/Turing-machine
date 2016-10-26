@@ -8,6 +8,8 @@
 **/
 #include "Node.hpp"
 #include <iostream>
+#include <vector>
+#include <string>
 
 using namespace std;
 
@@ -16,18 +18,19 @@ class Tape{
 	Node* init;  // Node where the input starts. Its used just for showing the whole content.
 	int headPos;
 	int inputLength;
+	string whiteSymbol;
 public:
-	Tape();
-	Tape(char* input);
+	Tape(string whiteSymbol);
+	Tape(string whiteSymbol, vector<string> input);
 	~Tape();
 	void MoveRight();
 	void MoveLeft();
 	const bool IsEmpty();
-	const char Read();
-	void Write(char c);
+	string Read();
+	void Write(string c);
 	const void ShowTape();
 	void Movement(char mov);
 private:
-	void LoadInputToTape(char* entrada);
+	void LoadInputToTape(vector<string> input);
 	void MoveHeadToInit();
 };

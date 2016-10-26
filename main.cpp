@@ -1,7 +1,10 @@
 #include "Turing.hpp"
+#include <iostream>
 
-int main(int argc, char *argv[]) {
-	Turing turing;
+using namespace std;
+
+int main(int argc, char * argv[]) {
+	Turing * turing;
 	int option = 0;
 
 	cout << endl << endl <<"Welcome to Turing Machine Simulator." << endl;
@@ -14,19 +17,19 @@ int main(int argc, char *argv[]) {
 		cout << "    4.Exit." << endl;
 		cout << endl << endl << "Insert option: " ;
 		cin >> option;
-		system("clear");
 		switch(option) {
 			case 1:
-        turing.LoadMachine();
+        turing = new Turing();
 				break;
 			case 2:
-        turing.ShowMachine();
+        turing->ShowMachine();
 				break;
 			case 3:
 				char opc;
         bool verbose;
 				cout << endl << "Do you want to see it step by step execution? (S/N) : " ;
 				cin >> opc;
+				/*
 				switch(opc) {
 					case 'S':
                  verbose = true;
@@ -39,6 +42,7 @@ int main(int argc, char *argv[]) {
 					default : cout << "Incorrect election, returning to the main menu.." << endl;
 								break;
 				}
+				*/
 				break;
 			case 4:
         cout << "Exiting.." << endl;

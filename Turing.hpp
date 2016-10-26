@@ -1,5 +1,6 @@
 #include <iostream>
 #include <set>
+#include <string>
 #include <fstream>
 #include <vector>
 #include "State.hpp"

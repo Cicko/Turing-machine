@@ -67,9 +67,11 @@ void State::NewTransition (string transition, int numTapes) {
 }
 
 
-Transition State::GetTransition(int inx) {
+
+Transition* State::GetTransition(int inx) {
 		return transitions[inx];
 }
+
 
 
 void State::ShowAllTransitions () {

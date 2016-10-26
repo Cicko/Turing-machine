@@ -11,10 +11,9 @@
 
 using namespace std;
 
-
 class Node {
   string symbol;  // with string we can make complex symbols like: a1, a2, a3....
-  string white;   // white symbol.
+  string white;
   Node* right;
   Node* left;
 public:
