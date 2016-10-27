@@ -45,8 +45,6 @@ public:
 	void Simulate(bool verbose);  // If verbose then is step by step simulation.
 	void ShowAllTapesContent();
 
-
-
 private:
 	void AnalyzeTuple(int i, int state, char movement, int next);
 	void LoadStates (string states);
@@ -57,6 +55,8 @@ private:
 	void LoadFinalStates (string states);
 	void LoadNumTapes (string num);
 	void LoadTransition (string trans);
+
+	bool StateExists (string id);
 
 	void FillTapes ();
 	State* GetStateById (string id);

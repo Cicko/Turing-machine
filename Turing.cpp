@@ -140,7 +140,7 @@ void Turing::ShowTransitions () {
 ///// FUNCIONES PRIVADAS
 void Turing::LoadStates (string statesStr) {
 	vector<string> aStates = utils::lineToStrings (statesStr, " ");
-	for (int i = 0;i < aStates.size(); i++) {
+	for (int i = 0; i < aStates.size(); i++) {
 			State* newState = new State(aStates[i]);
 			states.push_back(newState);
 	}
@@ -188,12 +188,24 @@ void Turing::LoadNumTapes (string num) {
 void Turing::LoadTransition (string trans) {
 	vector<string> transition = utils::lineToStrings(trans, " ");
 	string transOrigState = transition[0];  // Transition's origin state
-	for (int i = 0; i < states.size(); i++) {
-		if (transOrigState == states[i]->GetId()) {
-			states[i]->NewTransition(trans, tapes.size());
-			return;
+	if (!StateExists(transOrigState)) {
+		cerr << "The state " << transOrigState << " does not exist.." << endl;
+	}
+	else {
+		for (int i = 0; i < states.size(); i++) {
+			if (transOrigState == states[i]->GetId()) {
+				states[i]->NewTransition(trans, tapes.size());
+				return;
+			}
 		}
 	}
+}
+
+bool Turing::StateExists (string id) {
+	for (int i = 0; i < GetNumStates(); i++) {
+		if (id == states[i]->GetId()) return true;
+	}
+	return false;
 }
 
 void Turing::Simulate (bool verbose) {

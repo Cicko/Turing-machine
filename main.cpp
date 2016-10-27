@@ -12,11 +12,11 @@ int main(int argc, char * argv[]) {
 	cout << endl << endl <<"Welcome to Turing Machine Simulator." << endl;
 
 	while(option != 4){
-		cout << endl << endl << "MENU : " << endl;
-		cout << "    1.Load Turing machine." << endl;
-		cout << "    2.Show Turing machine." << endl;
-		cout << "    3.Simulate. " << endl;
-		cout << "    4.Exit." << endl;
+		cout << endl << endl << "MENU: " << endl;
+		cout << "    1. Load Turing machine." << endl;
+		cout << "    2. Show Turing machine." << endl;
+		cout << "    3. Simulate. " << endl;
+		cout << "    4. Exit." << endl;
 		cout << endl << endl << "Insert option: " ;
 		cin >> option;
 		cout << endl;
