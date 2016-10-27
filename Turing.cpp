@@ -1,5 +1,17 @@
 #include "Turing.hpp"
 
+#define LOADING_ERROR -1
+#define EXCEPTION_ERROR -1
+#define NO_FILE_ERROR -1
+
+#define SUCCESS 0
+#define NO_STATES_ERROR -1
+#define NO_INITIAL_STATE_FOUND -2
+#define NO_WHITE_SYMBOL_ERROR -3
+#define NO_FINAL_FOUND -4
+#define NUM_TAPES_ERROR -5
+#define TRANS_STATE_ERROR -6
+
 ///// CONSTRUCTOR Y DESTRUCTOR
 Turing::Turing(){
 	loadedMachine = false;
@@ -25,20 +37,38 @@ int Turing::LoadMachine() {
 
 	  if (file.is_open()) {
 	      string temp;
+				int success = SUCCESS;
+				bool wasError = false;
+				auto check = [&](void) {
+					if (success != SUCCESS) {
+						cerr << "ERROR: ";
+						ShowErrors(success);
+						wasError = true;
+					}
+				};
 	      getline (file, temp);
-	      LoadStates (temp);
+	      success = LoadStates (temp);
+				check();
 	      getline (file, temp);
-		    LoadInputSymbols (temp);
+		    success = LoadInputSymbols (temp);
+				check();
 				getline (file, temp);
-	      LoadTapeSymbols(temp);
+	    	success = LoadTapeSymbols(temp);
+				check();
 	      getline (file, temp);
-	      LoadInitialState(temp);
+	      success = LoadInitialState(temp);
+				check();
 	      getline (file, temp);
-	      LoadWhiteSymbol(temp);
+	      success = LoadWhiteSymbol(temp);
+				check();
 	      getline (file, temp);
-	      LoadFinalStates (temp);
+	      success = LoadFinalStates (temp);
+				check();
 				getline (file, temp);
-				LoadNumTapes (temp);
+				success = LoadNumTapes (temp);
+				check();
+
+				if (wasError) return LOADING_ERROR;
 
 	    	while (true) {
 	      	getline (file, temp);
@@ -50,12 +80,12 @@ int Turing::LoadMachine() {
 	  }
 	  else {
 	    cout << "El fichero no existe" << endl;
-			return -1;
+			return NO_FILE_ERROR;
 	  }
 	}
 	catch (exception e) {
 		std::cerr << e.what() << endl;
-		return -1;
+		return EXCEPTION_ERROR;
 	}
 }
 
@@ -137,65 +167,109 @@ void Turing::ShowTransitions () {
 }
 
 
+void Turing::ShowErrors (int error) {
+	switch (error) {
+		case SUCCESS:
+			break;
+		case NO_STATES_ERROR:
+			cerr << "There are no states in the machine definition.." << endl;
+			break;
+		case NO_INITIAL_STATE_FOUND:
+			cerr << "The initial state can not be found.." << endl;
+			break;
+		case NO_WHITE_SYMBOL_ERROR:
+			cerr << "The machine have no specified the white symbol.." << endl;
+			break;
+		case NO_FINAL_FOUND:
+			cerr << "The final states are incorrect.." << endl;
+			break;
+		case NUM_TAPES_ERROR:
+			cerr << "The number of tapes have to be at least 1" << endl;
+			break;
+		case TRANS_STATE_ERROR:
+			cerr << "The state of the transition does not exist" << endl;
+			break;
+		default:
+			cerr << "Unknown error" << endl;
+	}
+}
+
+
 ///// FUNCIONES PRIVADAS
-void Turing::LoadStates (string statesStr) {
+int Turing::LoadStates (string statesStr) {
 	vector<string> aStates = utils::lineToStrings (statesStr, " ");
+	if (aStates.size() < 1) return NO_STATES_ERROR;
 	for (int i = 0; i < aStates.size(); i++) {
 			State* newState = new State(aStates[i]);
 			states.push_back(newState);
 	}
+	return SUCCESS;
 }
 
-void Turing::LoadInputSymbols (string symbols) {
+int Turing::LoadInputSymbols (string symbols) {
 	inputSymbols = utils::lineToStrings (symbols, " ");
+	return SUCCESS;
 }
 
-void Turing::LoadTapeSymbols (string symbols) {
+int Turing::LoadTapeSymbols (string symbols) {
   tapeSymbols = utils::lineToStrings (symbols, " ");
+	return SUCCESS;
 }
 
-void Turing::LoadInitialState (string state) {
+int Turing::LoadInitialState (string state) {
 	for (int i = 0; i < GetNumStates(); i++) {
 		if(states[i]->GetId() == state) {
 			initialState = states[i];
 			actualState = initialState;
+			return SUCCESS;
 		}
 	}
+	return NO_INITIAL_STATE_FOUND;
 }
 
-void Turing::LoadWhiteSymbol (string symbol) {
+int Turing::LoadWhiteSymbol (string symbol) {
 	whiteSymbol = symbol;
+	if (whiteSymbol == "") return NO_WHITE_SYMBOL_ERROR;
+	return SUCCESS;
 }
 
-void Turing::LoadFinalStates (string statesStr) {
+int Turing::LoadFinalStates (string statesStr) {
 	finals = utils::lineToStrings(statesStr, " ");
+	bool finalFound = false;
 
 	for (int i = 0; i < finals.size(); i++) {
 		for (int j = 0; j < states.size(); j++) {
-			if (finals[i] == states[j]->GetId())
+			if (finals[i] == states[j]->GetId()) {
 				states[j]->SetFinal(true);
+				finalFound = true;
+			}
 		}
 	}
+	if (finalFound) return SUCCESS;
+	else return NO_FINAL_FOUND;
 }
 
-void Turing::LoadNumTapes (string num) {
+int Turing::LoadNumTapes (string num) {
 	int numTapes = stoi(num);
-	for (int i = 0;i < numTapes; i++) {
+	if (numTapes < 1) return NUM_TAPES_ERROR;
+	for (int i = 0; i < numTapes; i++) {
 		tapes.push_back(new Tape(whiteSymbol));
 	}
+	return SUCCESS;
 }
 
-void Turing::LoadTransition (string trans) {
+int Turing::LoadTransition (string trans) {
 	vector<string> transition = utils::lineToStrings(trans, " ");
 	string transOrigState = transition[0];  // Transition's origin state
 	if (!StateExists(transOrigState)) {
 		cerr << "The state " << transOrigState << " does not exist.." << endl;
+		return TRANS_STATE_ERROR;
 	}
 	else {
 		for (int i = 0; i < states.size(); i++) {
 			if (transOrigState == states[i]->GetId()) {
 				states[i]->NewTransition(trans, tapes.size());
-				return;
+				return SUCCESS;
 			}
 		}
 	}

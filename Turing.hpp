@@ -25,7 +25,7 @@ public:
 	Turing();
 	~Turing();
 	int LoadMachine ();
-	bool LoadedMachine () { return loadedMachine; }
+	int LoadedMachine () { return loadedMachine; }
 
 	void ShowMachine ();
 	void ShowStates ();
@@ -37,6 +37,8 @@ public:
 	void ShowNumTapes ();
 	void ShowTransitions ();
 
+	void ShowErrors (int error);
+
 	unsigned GetNumTapes () { return tapes.size(); }
 	unsigned GetNumStates () { return states.size(); }
 	unsigned GetNumInputSymbols () { return inputSymbols.size(); }
@@ -47,14 +49,15 @@ public:
 
 private:
 	void AnalyzeTuple(int i, int state, char movement, int next);
-	void LoadStates (string states);
-	void LoadInputSymbols (string symbols);
-	void LoadTapeSymbols (string symbols);
-	void LoadInitialState (string state);
-	void LoadWhiteSymbol (string symbol);
-	void LoadFinalStates (string states);
-	void LoadNumTapes (string num);
-	void LoadTransition (string trans);
+	int LoadStates (string states);
+	int LoadInputSymbols (string symbols);
+	int LoadTapeSymbols (string symbols);
+	int LoadInitialState (string state);
+	int LoadWhiteSymbol (string symbol);
+	int LoadFinalStates (string states);
+	int LoadNumTapes (string num);
+	int LoadTransition (string trans);
+	
 
 	bool StateExists (string id);
 

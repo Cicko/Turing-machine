@@ -6,6 +6,6 @@
 
 using namespace std;
 
-typedef pair<string, string> tapeWM_t;   // Input and Movement on a tape.
+typedef pair<string, string> tapeWM_t;   // Write and Movement on a tape.
 
 #endif
