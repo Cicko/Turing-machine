@@ -12,6 +12,11 @@
 #define NUM_TAPES_ERROR -5
 #define TRANS_STATE_ERROR -6
 
+
+
+
+
+
 ///// CONSTRUCTOR Y DESTRUCTOR
 Turing::Turing(){
 	loadedMachine = false;
@@ -303,8 +308,10 @@ void Turing::Simulate (bool verbose) {
 					tapes[j]->Write(actualTrans->GetTapesWM()[j].first);  // first --> Writes
 					tapes[j]->Movement(actualTrans->GetTapesWM()[j].second); // second --> Movement
 				}
-				if (verbose)
+				if (verbose) {
 					ShowAllTapesContent();
+					cout << endl;
+				}
 				i = -1;
 			}
 		}
@@ -317,7 +324,6 @@ void Turing::Simulate (bool verbose) {
 			cout << "Sorry... but you input is not accepted.." << endl;
 	}
 }
-
 
 
 void Turing::FillTapes () {
